@@ -1,21 +1,9 @@
+
+#main=pd.read_json("/content/drive/MyDrive/Testing/Reltio API Response-20210930T071832Z-001/Reltio API Response/ClinicalPractitionersamplejson.json")
+
 from copy import deepcopy
-import pandas as pd
+import pandas
 import json
-import numpy as np
-import re
-import sys
-from google.cloud import storage
-import pandas as pd
-from pandas.io import gbq
-
-test_Scenario="TS_Symedical_InitialLoad_008 - To validate the count of records between the files in GCS archive folder and GCS source file landing for Symedical"
-print(test_Scenario)
-
-#source file path
-input_path1=input("Enter source File Path")#
-
-# archive file path
-input_path2=input("Enter archive File Path")#
 
 
 def cross_join(left, right):
@@ -51,11 +39,13 @@ def json_to_dataframe(data_in):
             rows = [{prev_heading[1:]: data}]
         return rows
 
-    return pd.DataFrame(flatten_json(data_in))
+    return pandas.DataFrame(flatten_json(data_in))
 
 
+if __name__ == '__main__':
+    with open('/content/drive/MyDrive/comments/comments18.json') as json_file:
+      json_data = json.load(json_file)
+      df = json_to_dataframe(json_data)
+      print(df)
+      df.to_csv('/content/drive/MyDrive/comments/comments18.csv', mode='w')
 
-with open('{}'.format(input_path2)) as json_file:
-        json_data = json.load(json_file)
-        df = json_to_dataframe(json_data)
-        archive_file=df

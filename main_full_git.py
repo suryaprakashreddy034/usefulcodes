@@ -41,23 +41,33 @@ def json_to_dataframe(data_in):
     return pandas.DataFrame(flatten_json(data_in))
 
 GITHUB_USERNAME="suryaprakashreddy034"
-GITHUB_TOKEN="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"
+GITHUB_TOKEN="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"
 
 github_api = "https://api.github.com"
 gh_session = requests.Session()
 gh_session.auth = (GITHUB_USERNAME,GITHUB_TOKEN)
-url = github_api + '/repos/suryaprakashreddy034/gcp_codes/pulls/2'
+url = github_api + '/repos/suryaprakashreddy034/gcp_codes/pulls/1'
 commits = gh_session.get(url = url)
 commits_json = commits.json()
-
+'''
 #print(json.dumps(commits_json, indent=4))
 URL="https://api.github.com/repos/suryaprakashreddy034/gcp_codes/issues/2/comments"
 r = requests.get(url = URL)
-  
-# extracting data in json format
 
+# extracting data in json format
+'''
+data = commits.text
+json_data = json.loads(data)
+df = json_to_dataframe(json_data)
+
+
+URL_issues=df["_links.comments.href"].iloc[0]
+URL_pulls=df["_links.review_comments.href"].iloc[0]
+#print(json.dumps(commits_json, indent=4))
+#URL="https://api.github.com/repos/suryaprakashreddy034/gcp_codes/issues/2/comments"
+r = requests.get(url = URL_issues)
 data = r.text
 json_data = json.loads(data)
 df = json_to_dataframe(json_data)
 print(df)
-df.to_csv('/content/drive/MyDrive/comments18.csv', mode='w')
+# extracting data in json format

@@ -2,26 +2,25 @@ from copy import deepcopy
 import pandas
 import json
 
-new_debt_dic = {}
-def flatten_json(data, prev_heading=''):
-    if isinstance(data, dict):
-
-        for key, value in data.items():
-            flatten_json(value, prev_heading + '.' + key)
-    elif isinstance(data, list):
-
-        if len(data)<=1:
-            for i in range(len(data)):
-                flatten_json(data[i], prev_heading)
+def json_normalizer(in_data):
+    new_debt_dic = {}
+    def flatten_json(data, prev_heading=''):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                flatten_json(value, prev_heading + '.' + key)
+        elif isinstance(data, list):
+            if len(data)<=1:
+                for i in range(len(data)):
+                    flatten_json(data[i], prev_heading)
+            else:
+                for i in range(len(data)):
+                    flatten_json(data[i], prev_heading+"-"+str(i+1))
         else:
-            for i in range(len(data)):
-                flatten_json(data[i], prev_heading+"-"+str(i+1))
-    else:
-        rows = {prev_heading[1:]: data}
-        new_debt_dic[prev_heading[1:]] = data
-    
+            new_debt_dic[prev_heading[1:]] = data
+        
 
-    return [new_debt_dic]
+        return new_debt_dic
+    return flatten_json(in_data)
 
     
 
